@@ -1085,7 +1085,7 @@
                 
                 console.log('Submitting ticket data:', ticketData); // Debug log
                 
-                const response = await fetch('http://44.223.23.145:3426/api/tickets', {
+                const response = await fetch('http://16.170.208.88:3426/api/tickets', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1158,7 +1158,7 @@
                 params.append('emp_id', currentEmpId);
                 if (statusFilter) params.append('status', statusFilter);
                 
-                const response = await fetch(`http://44.223.23.145:3426/api/tickets?${params.toString()}`);
+                const response = await fetch(`http://16.170.208.88:3426/api/tickets?${params.toString()}`);
                 if (!response.ok) throw new Error('Failed to fetch tickets');
                 
                 const tickets = await response.json();
@@ -1208,7 +1208,7 @@
 
         async function viewTicket(ticketId) {
             try {
-                const response = await fetch(`http://44.223.23.145:3426/api/tickets/${ticketId}`);
+                const response = await fetch(`http://16.170.208.88:3426/api/tickets/${ticketId}`);
                 if (!response.ok) throw new Error('Failed to fetch ticket');
                 
                 const ticket = await response.json();
@@ -1238,7 +1238,7 @@
 
         async function loadComments(ticketId) {
             try {
-                const response = await fetch(`http://44.223.23.145:3426/api/tickets/${ticketId}/comments`);
+                const response = await fetch(`http://16.170.208.88:3426/api/tickets/${ticketId}/comments`);
                 if (!response.ok) throw new Error('Failed to fetch comments');
                 
                 const comments = await response.json();

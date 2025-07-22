@@ -848,7 +848,7 @@
                     description: description
                 };
 
-                const response = await fetch('http://54.166.206.245:3025/api/tickets', {
+                const response = await fetch('http://16.170.208.88:3025/api/tickets', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -932,7 +932,7 @@
                 params.append('emp_id', currentEmpId);
                 if (statusFilter) params.append('status', statusFilter);
 
-                const response = await fetch(`http://54.166.206.245:3025/api/tickets?${params.toString()}`);
+                const response = await fetch(`http://16.170.208.88:3025/api/tickets?${params.toString()}`);
                 if (!response.ok) throw new Error('Failed to fetch tickets');
 
                 const tickets = await response.json();
@@ -1007,7 +1007,7 @@
         // View ticket details
         async function viewTicket(ticketId) {
             try {
-                const response = await fetch(`http://54.166.206.245:3025/api/tickets/${ticketId}`);
+                const response = await fetch(`http://16.170.208.88:3025/api/tickets/${ticketId}`);
                 if (!response.ok) throw new Error('Failed to fetch ticket');
 
                 const ticket = await response.json();
@@ -1043,7 +1043,7 @@
         // Load comments for a ticket
         async function loadComments(ticketId) {
             try {
-                const response = await fetch(`http://54.166.206.245:3025/api/tickets/${ticketId}/comments`);
+                const response = await fetch(`http://16.170.208.88:3025/api/tickets/${ticketId}/comments`);
                 if (!response.ok) throw new Error('Failed to fetch comments');
 
                 const comments = await response.json();

@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: new_employee_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin123
+      POSTGRES_PASSWORD: admin321
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -28,7 +28,7 @@ services:
       - "3426:3426"
     environment:
       - DB_USER=postgres
-      - DB_PASSWORD=admin123
+      - DB_PASSWORD=admin321
       - DB_NAME=new_employee_db
       - DB_HOST=postgres
       - DB_PORT=5432
