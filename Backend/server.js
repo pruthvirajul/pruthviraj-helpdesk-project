@@ -177,15 +177,26 @@ VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
 });
 
 // API to get all tickets
-app.get('/api/tickets', async (req, res) => {
+// Get a single ticket by ticket_id
+app.get('/api/tickets/:ticket_id', async (req, res) => {
+    const { ticket_id } = req.params;
     try {
-        const result = await pool.query('SELECT * FROM tickets ORDER BY created_at DESC');
-        res.json(result.rows);
+        const result = await pool.query(
+            'SELECT * FROM tickets WHERE ticket_id = $1',
+            [ticket_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Ticket not found' });
+        }
+
+        res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error fetching tickets:', err);
+        console.error('Error fetching ticket:', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 // Start server
 const startServer = async () => {
