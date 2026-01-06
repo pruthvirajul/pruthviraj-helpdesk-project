@@ -1,5 +1,6 @@
 // Import required modules
-const express = require('express');  // ✅ MUST be uncommented
+const express = require('express'); 
+  // ✅ MUST be uncommented
 const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
@@ -19,6 +20,7 @@ const pool = new Pool({
     password: 'admin321',
     port: 5432,
 });
+
 
 // Generate random VPPL ticket IDs
 function generateTicketId() {
@@ -153,12 +155,13 @@ app.post('/api/tickets', async (req, res) => {
         }
 
         const ticket_id = generateTicketId();
-        const result = await pool.query(
-            `INSERT INTO tickets 
-            (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-            [ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description]
-        );
+       const result = await pool.query(
+    `INSERT INTO tickets 
+(ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
+VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+    [ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description]
+);
+
 
         res.status(201).json(result.rows[0]);
     } catch (err) {
