@@ -176,9 +176,10 @@ app.get('/api/tickets', async (req, res) => {
 
 const startServer = async () => {
     await initializeDatabase();
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
+    app.listen(3426, '0.0.0.0', () => {
+  console.log('Server running on port 3426');
+});
+
 };
 
 startServer();
