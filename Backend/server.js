@@ -144,25 +144,15 @@ const initializeDatabase = async () => {
 
 // API to create a new ticket
 app.post('/api/tickets', async (req, res) => {
+    console.log('Received ticket data:', req.body);
     try {
-        console.log('Received ticket data:', req.body);
-
         const { emp_id, emp_name, emp_email, department, priority, issue_type, description } = req.body;
-
         if (!emp_id || !emp_name || !emp_email || !department || !priority || !issue_type || !description) {
+            console.log('Missing field(s)');
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        if (!/^VPPL(0[1-9]|[1-9][0-9])$/.test(emp_id)) {
-            return res.status(400).json({ error: 'Invalid Employee ID' });
-        }
-
-        if (!/^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/.test(emp_email)) {
-            return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
-        }
-
         const ticket_id = generateTicketId();
-
         const result = await pool.query(
             `INSERT INTO tickets 
             (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
@@ -172,10 +162,11 @@ app.post('/api/tickets', async (req, res) => {
 
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error('Error creating ticket:', err);
+        console.error('Error creating ticket:', err); // ✅ This prints the exact cause
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 // API to get all tickets
 app.get('/api/tickets', async (req, res) => {
