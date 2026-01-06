@@ -1,4 +1,5 @@
-// const express = require('express');
+// Import required modules
+const express = require('express');  // ✅ MUST be uncommented
 const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
@@ -6,10 +7,11 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3426;
 
-/* 🔧 FIX — REQUIRED TO READ req.body */
+// 🔧 Middleware to parse JSON and URL-encoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// PostgreSQL pool
 const pool = new Pool({
     user: 'postgres',
     host: 'postgres',
@@ -18,7 +20,7 @@ const pool = new Pool({
     port: 5432,
 });
 
-// Helper function to generate ATS ticket IDs
+// Generate random ATS ticket IDs
 function generateTicketId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = 'ATS';
@@ -28,6 +30,7 @@ function generateTicketId() {
     return result;
 }
 
+// Test database connection
 pool.connect((err, client, release) => {
     if (err) {
         console.error('Database connection failed:', err.message, err.stack);
@@ -37,6 +40,7 @@ pool.connect((err, client, release) => {
     release();
 });
 
+// Enable CORS for allowed origins
 app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = [
@@ -58,14 +62,17 @@ app.use(cors({
     allowedHeaders: ['Content-Type'],
 }));
 
+// Serve frontend static files
 app.use(express.static(path.join(__dirname, '../Frontend')));
 
+// Serve favicon
 app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend', 'favicon.ico'), err => {
         if (err) res.status(204).end();
     });
 });
 
+// Initialize database tables
 const initializeDatabase = async () => {
     try {
         const schemaCheck = await pool.query(`
@@ -135,6 +142,7 @@ const initializeDatabase = async () => {
     }
 };
 
+// API to create a new ticket
 app.post('/api/tickets', async (req, res) => {
     try {
         console.log('Received ticket data:', req.body);
@@ -169,18 +177,23 @@ app.post('/api/tickets', async (req, res) => {
     }
 });
 
+// API to get all tickets
 app.get('/api/tickets', async (req, res) => {
-    const result = await pool.query('SELECT * FROM tickets ORDER BY created_at DESC');
-    res.json(result.rows);
+    try {
+        const result = await pool.query('SELECT * FROM tickets ORDER BY created_at DESC');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching tickets:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
+// Start server
 const startServer = async () => {
     await initializeDatabase();
     app.listen(port, '0.0.0.0', () => {
-    console.log(`Server running on port ${port}`);
-});
-
-
+        console.log(`Server running on port ${port}`);
+    });
 };
 
 startServer();
