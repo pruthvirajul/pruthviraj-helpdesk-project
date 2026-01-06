@@ -1294,13 +1294,12 @@
             }
         }
 // Function to update ticket status
+// Correct way if backend expects PATCH /api/tickets/:ticketId
 async function updateStatus(ticketId, newStatus) {
     try {
-        const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}/status`, {
-            method: 'PATCH', // Must be PATCH
-            headers: {
-                'Content-Type': 'application/json'
-            },
+        const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus })
         });
 
@@ -1311,24 +1310,13 @@ async function updateStatus(ticketId, newStatus) {
 
         const updatedTicket = await response.json();
         alert(`Ticket ${ticketId} status updated to ${updatedTicket.status}`);
-
-        // Update the status badge in the table
-        const statusSpan = document.querySelector(`#myTicketsBody td span.status-badge`);
-        if (statusSpan) {
-            statusSpan.textContent = updatedTicket.status;
-            statusSpan.className = `status-badge status-${updatedTicket.status.toLowerCase().replace(' ', '-')}`;
-        }
-
-        // If modal is open, update modal status too
-        if (currentTicketId === ticketId) {
-            document.getElementById('modalStatus').textContent = updatedTicket.status;
-        }
-
+        // Update UI...
     } catch (error) {
         console.error('Error updating ticket status:', error);
         alert('Error updating ticket: ' + error.message);
     }
 }
+
 
         async function loadComments(ticketId) {
             try {
