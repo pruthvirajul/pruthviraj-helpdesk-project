@@ -1254,6 +1254,21 @@
                                 <i class="fas fa-eye"></i>
                             </button>
                         </td>
+                        <td>
+    <button class="action-btn btn-view" onclick="viewTicket('${ticket.ticket_id}')" title="View">
+        <i class="fas fa-eye"></i>
+    </button>
+    <button class="action-btn" onclick="updateStatus('${ticket.ticket_id}', 'In Progress')" title="Mark In Progress">
+        <i class="fas fa-spinner"></i>
+    </button>
+    <button class="action-btn" onclick="updateStatus('${ticket.ticket_id}', 'Resolved')" title="Mark Resolved">
+        <i class="fas fa-check"></i>
+    </button>
+    <button class="action-btn" onclick="updateStatus('${ticket.ticket_id}', 'Closed')" title="Mark Closed">
+        <i class="fas fa-times"></i>
+    </button>
+</td>
+
                     `;
 
                     ticketsBody.appendChild(row);
@@ -1293,8 +1308,6 @@
                 alert('Error loading ticket details');
             }
         }
-// Function to update ticket status
-// Correct way if backend expects PATCH /api/tickets/:ticketId
 async function updateStatus(ticketId, newStatus) {
     try {
         const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}`, {
@@ -1310,12 +1323,15 @@ async function updateStatus(ticketId, newStatus) {
 
         const updatedTicket = await response.json();
         alert(`Ticket ${ticketId} status updated to ${updatedTicket.status}`);
-        // Update UI...
+
+        // ✅ Refresh the ticket table to show the new status
+        await loadMyTickets();
     } catch (error) {
         console.error('Error updating ticket status:', error);
         alert('Error updating ticket: ' + error.message);
     }
 }
+
 
 
         async function loadComments(ticketId) {
