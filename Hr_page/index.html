@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS Help Desk - HR Dashboard</title>
+    <title>VPPL Help Desk - HR Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -516,7 +516,7 @@
             <div class="circle"></div>
             <div class="circle"></div>
         </div>
-        <h1><i class="fas fa-headset"></i> ATS Help Desk - HR Dashboard</h1>
+        <h1><i class="fas fa-headset"></i> VPPL Help Desk - HR Dashboard</h1>
         <p>Manage and resolve employee tickets efficiently</p>
     </header>
     
@@ -693,7 +693,7 @@
                     const empId = truncateText(ticket.emp_id || ticket.employeeId);
                     const department = truncateText(ticket.department);
                     const issueType = truncateText(ticket.issue_type || ticket.issueType);
-                    const ticketId = ticket.ticket_id || ticket.id || 'ATS' + Math.random().toString(36).substr(2, 5).toUpperCase();
+                    const ticketId = ticket.ticket_id || ticket.id || 'VPPL' + Math.random().toString(36).substr(2, 5).toUpperCase();
 
                     row.innerHTML = `
                         <td>${ticketId}</td>

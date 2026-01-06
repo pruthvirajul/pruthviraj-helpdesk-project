@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS Help Desk</title>
+    <title>VPPL Help Desk</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -793,7 +793,7 @@
             <div class="circle"></div>
             <div class="circle"></div>
         </div>
-        <h1><i class="fas fa-headset"></i> ATS Help Desk</h1>
+        <h1><i class="fas fa-headset"></i> VPPL Help Desk</h1>
         <p>Submit your queries and issues here. Our team will get back to you shortly.</p>
     </header>
 
@@ -804,8 +804,8 @@
             <form id="ticketForm">
                 <div class="form-group">
                     <label for="empId">Employee ID</label>
-                    <input type="text" id="empId" class="form-control" placeholder="ATS0xxx" pattern="^[ATS]{3}0(?!000)[0-9]{3}$" minlength="7" maxlength="7" required>
-                    <div class="invalid-feedback">Please enter a valid Employee ID (ATS0 followed by 3 digits, not all zeros)</div>
+                    <input type="text" id="empId" class="form-control" placeholder="VPPL0xxx" pattern="^[VPPL]{3}0(?!000)[0-9]{3}$" minlength="7" maxlength="7" required>
+                    <div class="invalid-feedback">Please enter a valid Employee ID (VPPL0 followed by 3 digits, not all zeros)</div>
                 </div>
                 
                 <div class="form-group">
@@ -1032,7 +1032,7 @@
 
         function generateTicketId() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = 'ATS';
+            let result = 'VPPL';
             for (let i = 0; i < 5; i++) {
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
@@ -1139,7 +1139,7 @@
         
         document.getElementById('empId').addEventListener('change', async function() {
             currentEmpId = this.value.trim();
-            if (/^[ATS]{3}0(?!000)[0-9]{3}$/.test(currentEmpId) && currentEmpId !== 'ATS0000') {
+            if (/^[VPPL]{3}0(?!000)[0-9]{3}$/.test(currentEmpId) && currentEmpId !== 'VPPL0000') {
                 document.getElementById('myTicketsCard').style.display = 'block';
                 await loadMyTickets();
             } else {

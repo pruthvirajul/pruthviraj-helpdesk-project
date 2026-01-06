@@ -160,7 +160,7 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'Field length exceeded' });
         }
 
-        if (!/^ATS0[0-9]{3}$/.test(emp_id) || emp_id === 'ATS0000') {
+        if (!/^VPPL0[0-9]{3}$/.test(emp_id) || emp_id === 'VPPL0000') {
             console.log('Invalid emp_id:', emp_id);
             return res.status(400).json({ error: 'Invalid Employee ID' });
         }
@@ -339,7 +339,7 @@ app.get('/api/tickets/:id/comments', async (req, res) => {
     }
 });
 
-app.get('/api/tickets/stats', async (req, res) => {
+app.get('/api/tickets/stVPPL', async (req, res) => {
     try {
         console.log('GET /api/tickets/stats');
         const result = await pool.query(`
