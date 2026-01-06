@@ -1,6 +1,5 @@
 // Import required modules
 const express = require('express'); 
-  // ✅ MUST be uncommented
 const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
@@ -8,7 +7,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3426;
 
-// 🔧 Middleware to parse JSON and URL-encoded bodies
+// Middleware to parse JSON and URL-encoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,12 +20,11 @@ const pool = new Pool({
     port: 5432,
 });
 
-
-// Generate random VPPL ticket IDs
+// Generate random VPPL ticket IDs (total 10 chars)
 function generateTicketId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = 'VPPL';
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 6; i++) { // 4 + 6 = 10 chars
         result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
@@ -51,9 +49,6 @@ app.use(cors({
             'http://51.20.253.98:8049',
             'http://51.20.253.98:8050',
         ];
-
-        console.log('CORS request from origin:', origin);
-
         if (!origin || allowedOrigins.includes(origin) || origin === "null") {
             callback(null, true);
         } else {
@@ -77,6 +72,7 @@ app.get('/favicon.ico', (req, res) => {
 // Initialize database tables
 const initializeDatabase = async () => {
     try {
+        // Drop tables if schema mismatch
         const schemaCheck = await pool.query(`
             SELECT column_name, data_type, character_maximum_length 
             FROM information_schema.columns 
@@ -110,6 +106,7 @@ const initializeDatabase = async () => {
             await pool.query('DROP TABLE IF EXISTS tickets CASCADE');
         }
 
+        // Tickets table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS tickets (
                 id SERIAL PRIMARY KEY,
@@ -127,6 +124,7 @@ const initializeDatabase = async () => {
             )
         `);
 
+        // Comments table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS comments (
                 id SERIAL PRIMARY KEY,
@@ -150,26 +148,33 @@ app.post('/api/tickets', async (req, res) => {
     try {
         const { emp_id, emp_name, emp_email, department, priority, issue_type, description } = req.body;
         if (!emp_id || !emp_name || !emp_email || !department || !priority || !issue_type || !description) {
-            console.log('Missing field(s)');
             return res.status(400).json({ error: 'All fields are required' });
         }
 
+        // Validate VPPL Employee ID
+        if (!/^VPPL(0[1-9]|[1-9][0-9])$/.test(emp_id)) {
+            return res.status(400).json({ error: 'Invalid Employee ID format' });
+        }
+
+        // Validate venturebiz.in email
+        if (!/^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/.test(emp_email)) {
+            return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
+        }
+
         const ticket_id = generateTicketId();
-       const result = await pool.query(
-    `INSERT INTO tickets 
+        const result = await pool.query(
+            `INSERT INTO tickets 
 (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
 VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-    [ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description]
-);
-
+            [ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description]
+        );
 
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error('Error creating ticket:', err); // ✅ This prints the exact cause
+        console.error('Error creating ticket:', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 // API to get all tickets
 app.get('/api/tickets', async (req, res) => {
