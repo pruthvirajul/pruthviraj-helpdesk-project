@@ -20,10 +20,10 @@ const pool = new Pool({
     port: 5432,
 });
 
-// Generate random ATS ticket IDs
+// Generate random VPPL ticket IDs
 function generateTicketId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = 'ATS';
+    let result = 'VPPL';
     for (let i = 0; i < 7; i++) {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
