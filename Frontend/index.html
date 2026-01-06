@@ -825,10 +825,13 @@
                     <label for="empEmail">Email Address</label>
                     <input type="email" id="empEmail" class="form-control" 
                            placeholder="Employee Email" 
-                           pattern="^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@astrolitetech\.com$" 
-                           title="Email must start with a letter, end with a letter, and have a domain of @astrolitetech.com" 
+   pattern="^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@venturebiz\.in$"
+
+                          title="Email must start with a letter, end with a letter, and have a domain of @venturebiz.in"
+
                            required minlength="8" maxlength="40">
-                    <div class="invalid-feedback">Please enter a valid email (must be @astrolitetech.com)</div>
+                  <div class="invalid-feedback">Please enter a valid email (must be @venturebiz.in)</div>
+
                 </div>
                 
                 <div class="form-group">
@@ -1017,7 +1020,8 @@
                     return false;
                 }
             } else if (field.id === 'empEmail') {
-                const regex = /^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@astrolitetech\.com$/;
+                const regex = /^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@venturebiz\.in$/;
+
                 if (!regex.test(field.value)) {
                     field.classList.add('is-invalid');
                     feedback.style.display = 'block';

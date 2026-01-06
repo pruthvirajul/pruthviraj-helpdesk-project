@@ -154,7 +154,7 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        if (emp_id.length > 20 || emp_name.length > 100 || emp_email.length > 100 || 
+        if (emp_id.length > 20 || emp_name.length > 100 || emp_email.length > 100 ||
             department.length > 100 || priority.length > 20 || issue_type.length > 100) {
             console.log('Validation failed: Field length exceeded');
             return res.status(400).json({ error: 'Field length exceeded' });
@@ -166,10 +166,11 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'Invalid Employee ID' });
         }
 
-        if (!/^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@astrolitetech\.com$/.test(emp_email)) {
+        if (!/^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@venturebiz\.in$/.test(emp_email)) {
             console.log('Invalid email:', emp_email);
-            return res.status(400).json({ error: 'Email must be from @astrolitetech.com domain' });
+            return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
         }
+
 
         if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(emp_name)) {
             console.log('Invalid emp_name:', emp_name);
