@@ -113,7 +113,7 @@ const initializeDatabase = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS tickets (
                 id SERIAL PRIMARY KEY,
-                ticket_id VARCHAR(10) UNIQUE NOT NULL,  -- Changed to 10 characters
+                ticket_id VARCHAR(10) UNIQUE NOT NULL,
                 emp_id VARCHAR(20) NOT NULL,
                 emp_name VARCHAR(100) NOT NULL,
                 emp_email VARCHAR(100) NOT NULL,
@@ -130,7 +130,7 @@ const initializeDatabase = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS comments (
                 id SERIAL PRIMARY KEY,
-                ticket_id VARCHAR(10) REFERENCES tickets(ticket_id) ON DELETE CASCADE,  -- Changed to match
+                ticket_id VARCHAR(10) REFERENCES tickets(ticket_id) ON DELETE CASCADE,
                 comment TEXT NOT NULL,
                 author VARCHAR(100) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -160,17 +160,16 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'Field length exceeded' });
         }
 
-        if (/^VPPL(0[1-9]|[1-9][0-9])$/.test(currentEmpId)) {
-
+        if (/^VPPL(0[1-9]|[1-9][0-9])$/.test(emp_id)) {
             console.log('Invalid emp_id:', emp_id);
             return res.status(400).json({ error: 'Invalid Employee ID' });
         }
 
-        if (!/^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@venturebiz\.in$/.test(emp_email)) {
+        const emailRegex = /^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/;
+        if (!emailRegex.test(emp_email)) {
             console.log('Invalid email:', emp_email);
             return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
         }
-
 
         if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(emp_name)) {
             console.log('Invalid emp_name:', emp_name);
@@ -200,7 +199,7 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'Invalid issue type' });
         }
 
-        const ticket_id = generateTicketId();  // Using our custom function instead of uuidv4()
+        const ticket_id = generateTicketId();
 
         const result = await pool.query(
             'INSERT INTO tickets (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
@@ -292,38 +291,6 @@ app.put('/api/tickets/:id/status', async (req, res) => {
         console.error('Error updating ticket status:', err.message, err.stack);
         res.status(500).json({ error: 'Internal Server Error', details: err.message });
     }
-});
-
-// backend/controllers/ticketsController.js
-
-app.post("/api/tickets", async (req, res) => {
-  try {
-    const { name, email, subject, message } = req.body;
-
-    // 1️⃣ Validate email properly
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
-
-    const emailRegex = /^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: "Email must be a valid @venturebiz.in email" });
-    }
-
-    // 2️⃣ Validate other required fields
-    if (!name || !subject || !message) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // 3️⃣ Save ticket to database (example with Sequelize)
-    const ticket = await Ticket.create({ name, email, subject, message });
-
-    res.status(201).json({ message: "Ticket submitted successfully", ticket });
-
-  } catch (err) {
-    console.error("Error submitting ticket:", err);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
 });
 
 app.get('/api/tickets/:id/comments', async (req, res) => {
