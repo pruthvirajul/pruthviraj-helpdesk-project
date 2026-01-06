@@ -294,34 +294,36 @@ app.put('/api/tickets/:id/status', async (req, res) => {
     }
 });
 
-app.post('/api/tickets/:id/comments', async (req, res) => {
-    try {
-        console.log('POST /api/tickets/:id/comments id:', req.params.id, 'body:', req.body);
-        const { id } = req.params;
-        const { comment, author } = req.body;
+// backend/controllers/ticketsController.js
 
-        if (!comment || !author) {
-            console.log('Missing comment or author');
-            return res.status(400).json({ error: 'Comment and author are required' });
-        }
+app.post("/api/tickets", async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
 
-        const ticketCheck = await pool.query('SELECT 1 FROM tickets WHERE ticket_id = $1', [id]);
-        if (ticketCheck.rows.length === 0) {
-            console.log('Ticket not found:', id);
-            return res.status(404).json({ error: 'Ticket not found' });
-        }
-
-        const result = await pool.query(
-            'INSERT INTO comments (ticket_id, comment, author) VALUES ($1, $2, $3) RETURNING *',
-            [id, comment, author]
-        );
-
-        console.log('Comment added:', result.rows[0]);
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error adding comment:', err.message, err.stack);
-        res.status(500).json({ error: 'Internal Server Error', details: err.message });
+    // 1️⃣ Validate email properly
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
+
+    const emailRegex = /^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Email must be a valid @venturebiz.in email" });
+    }
+
+    // 2️⃣ Validate other required fields
+    if (!name || !subject || !message) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // 3️⃣ Save ticket to database (example with Sequelize)
+    const ticket = await Ticket.create({ name, email, subject, message });
+
+    res.status(201).json({ message: "Ticket submitted successfully", ticket });
+
+  } catch (err) {
+    console.error("Error submitting ticket:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 app.get('/api/tickets/:id/comments', async (req, res) => {

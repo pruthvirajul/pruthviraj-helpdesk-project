@@ -823,9 +823,15 @@
                 
                 <div class="form-group">
                     <label for="empEmail">Email Address</label>
-                    <input type="email" id="empEmail" class="form-control" 
-                           placeholder="Employee Email" 
-   pattern="^[a-zA-Z][a-zA-Z0-9._-]{1,}[a-zA-Z]@venturebiz\.in$"
+                   <input
+  type="email"
+  name="email"
+  required
+  pattern="^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$"
+  title="Email must start and end with a letter and end with @venturebiz.in"
+/>
+
+
 
                           title="Email must start with a letter, end with a letter, and have a domain of @venturebiz.in"
 
