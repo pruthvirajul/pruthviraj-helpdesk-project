@@ -58,17 +58,16 @@ app.use(cors({
     allowedHeaders: ['Content-Type'],
 }));
 
-app.use(express.json());
 app.use(express.static(path.join(__dirname, '../Frontend')));
 
 app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend', 'favicon.ico'), (err) => {
         if (err) {
-            console.log('Favicon not found, sending 204');
             res.status(204).end();
         }
     });
 });
+
 
 const initializeDatabase = async () => {
     try {
@@ -113,7 +112,7 @@ const initializeDatabase = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS tickets (
                 id SERIAL PRIMARY KEY,
-                ticket_id VARCHAR(10) UNIQUE NOT NULL,
+                ticket_id VARCHAR(10) UNIQUE NOT NULL,  -- Changed to 10 characters
                 emp_id VARCHAR(20) NOT NULL,
                 emp_name VARCHAR(100) NOT NULL,
                 emp_email VARCHAR(100) NOT NULL,
@@ -130,7 +129,7 @@ const initializeDatabase = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS comments (
                 id SERIAL PRIMARY KEY,
-                ticket_id VARCHAR(10) REFERENCES tickets(ticket_id) ON DELETE CASCADE,
+                ticket_id VARCHAR(10) REFERENCES tickets(ticket_id) ON DELETE CASCADE,  -- Changed to match
                 comment TEXT NOT NULL,
                 author VARCHAR(100) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -154,22 +153,23 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        if (emp_id.length > 20 || emp_name.length > 100 || emp_email.length > 100 ||
+        if (emp_id.length > 20 || emp_name.length > 100 || emp_email.length > 100 || 
             department.length > 100 || priority.length > 20 || issue_type.length > 100) {
             console.log('Validation failed: Field length exceeded');
             return res.status(400).json({ error: 'Field length exceeded' });
         }
 
-        if (/^VPPL(0[1-9]|[1-9][0-9])$/.test(emp_id)) {
-            console.log('Invalid emp_id:', emp_id);
-            return res.status(400).json({ error: 'Invalid Employee ID' });
-        }
+       if (!/^VPPL(0[1-9]|[1-9][0-9])$/.test(emp_id)) {
+    console.log('Invalid emp_id:', emp_id);
+    return res.status(400).json({ error: 'Invalid Employee ID' });
+}
 
-        const emailRegex = /^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/;
-        if (!emailRegex.test(emp_email)) {
-            console.log('Invalid email:', emp_email);
-            return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
-        }
+
+       if (!/^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/.test(emp_email)) {
+    console.log('Invalid email:', emp_email);
+    return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
+}
+
 
         if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(emp_name)) {
             console.log('Invalid emp_name:', emp_name);
@@ -199,7 +199,7 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'Invalid issue type' });
         }
 
-        const ticket_id = generateTicketId();
+        const ticket_id = generateTicketId();  // Using our custom function instead of uuidv4()
 
         const result = await pool.query(
             'INSERT INTO tickets (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
@@ -293,6 +293,36 @@ app.put('/api/tickets/:id/status', async (req, res) => {
     }
 });
 
+app.post('/api/tickets/:id/comments', async (req, res) => {
+    try {
+        console.log('POST /api/tickets/:id/comments id:', req.params.id, 'body:', req.body);
+        const { id } = req.params;
+        const { comment, author } = req.body;
+
+        if (!comment || !author) {
+            console.log('Missing comment or author');
+            return res.status(400).json({ error: 'Comment and author are required' });
+        }
+
+        const ticketCheck = await pool.query('SELECT 1 FROM tickets WHERE ticket_id = $1', [id]);
+        if (ticketCheck.rows.length === 0) {
+            console.log('Ticket not found:', id);
+            return res.status(404).json({ error: 'Ticket not found' });
+        }
+
+        const result = await pool.query(
+            'INSERT INTO comments (ticket_id, comment, author) VALUES ($1, $2, $3) RETURNING *',
+            [id, comment, author]
+        );
+
+        console.log('Comment added:', result.rows[0]);
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error('Error adding comment:', err.message, err.stack);
+        res.status(500).json({ error: 'Internal Server Error', details: err.message });
+    }
+});
+
 app.get('/api/tickets/:id/comments', async (req, res) => {
     try {
         console.log('GET /api/tickets/:id/comments id:', req.params.id);
@@ -310,7 +340,7 @@ app.get('/api/tickets/:id/comments', async (req, res) => {
     }
 });
 
-app.get('/api/tickets/stVPPL', async (req, res) => {
+app.get('/api/tickets/stats', async (req, res) => {
     try {
         console.log('GET /api/tickets/stats');
         const result = await pool.query(`
