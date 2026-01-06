@@ -17,13 +17,13 @@ app.use(express.urlencoded({ extended: true }));
 // PostgreSQL Pool
 const pool = new Pool({
     user: 'postgres',
-    host: 'postgres',
+    host: 'postgres', // your DB host
     database: 'new_employee_db',
     password: 'admin321',
     port: 5432,
 });
 
-// Generate random VPPL ticket IDs
+// Generate random VPPL ticket IDs (VPPL + 6 random chars = 10)
 function generateTicketId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = 'VPPL';
@@ -58,10 +58,9 @@ app.use(cors({
             callback(new Error('CORS policy: Origin not allowed'));
         }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // ✅ add PATCH
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type'],
 }));
-
 
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, '../Frontend')));
@@ -191,7 +190,10 @@ app.patch('/api/tickets/:ticket_id/status', async (req, res) => {
 
     try {
         const result = await pool.query(
-            `UPDATE tickets SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE ticket_id = $2 RETURNING *`,
+            `UPDATE tickets 
+             SET status = $1, updated_at = CURRENT_TIMESTAMP 
+             WHERE ticket_id = $2 
+             RETURNING *`,
             [status, ticket_id]
         );
 
