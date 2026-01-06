@@ -2,8 +2,7 @@
 // Backend: server.js
 // =====================
 
-// Import required modules
-const express = require('express'); 
+const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
@@ -11,11 +10,11 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3426;
 
-// Middleware to parse JSON and URL-encoded bodies
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// PostgreSQL pool
+// PostgreSQL Pool
 const pool = new Pool({
     user: 'postgres',
     host: 'postgres',
@@ -24,27 +23,27 @@ const pool = new Pool({
     port: 5432,
 });
 
-// Generate random VPPL ticket IDs (total 10 chars)
+// Generate random VPPL ticket IDs
 function generateTicketId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = 'VPPL';
-    for (let i = 0; i < 6; i++) { // VPPL + 6 chars = 10
+    for (let i = 0; i < 6; i++) {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
 }
 
-// Test database connection
+// Test DB connection
 pool.connect((err, client, release) => {
     if (err) {
-        console.error('Database connection failed:', err.message, err.stack);
+        console.error('Database connection failed:', err.message);
         process.exit(1);
     }
     console.log('Database connected successfully');
     release();
 });
 
-// Enable CORS for allowed origins
+// CORS
 app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = [
@@ -59,7 +58,7 @@ app.use(cors({
             callback(new Error('CORS policy: Origin not allowed'));
         }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type'],
 }));
 
@@ -78,40 +77,7 @@ app.get('/favicon.ico', (req, res) => {
 // =====================
 const initializeDatabase = async () => {
     try {
-        const schemaCheck = await pool.query(`
-            SELECT column_name, data_type, character_maximum_length 
-            FROM information_schema.columns 
-            WHERE table_name = 'tickets';
-        `);
-
-        const expected = {
-            emp_id: { type: 'character varying', length: 20 },
-            emp_name: { type: 'character varying', length: 100 },
-            emp_email: { type: 'character varying', length: 100 },
-            department: { type: 'character varying', length: 100 },
-            priority: { type: 'character varying', length: 20 },
-            issue_type: { type: 'character varying', length: 100 },
-            description: { type: 'text', length: null },
-            status: { type: 'character varying', length: 20 },
-            ticket_id: { type: 'character varying', length: 10 },
-            created_at: { type: 'timestamp without time zone', length: null },
-            updated_at: { type: 'timestamp without time zone', length: null }
-        };
-
-        let invalidFields = [];
-        schemaCheck.rows.forEach(row => {
-            const expectedField = expected[row.column_name];
-            if (expectedField && (row.data_type !== expectedField.type || row.character_maximum_length !== expectedField.length)) {
-                invalidFields.push(row.column_name);
-            }
-        });
-
-        if (invalidFields.length > 0) {
-            await pool.query('DROP TABLE IF EXISTS comments CASCADE');
-            await pool.query('DROP TABLE IF EXISTS tickets CASCADE');
-        }
-
-        // Tickets table
+        // Create tickets table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS tickets (
                 id SERIAL PRIMARY KEY,
@@ -129,7 +95,7 @@ const initializeDatabase = async () => {
             )
         `);
 
-        // Comments table
+        // Create comments table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS comments (
                 id SERIAL PRIMARY KEY,
@@ -153,7 +119,6 @@ const initializeDatabase = async () => {
 
 // Create a new ticket
 app.post('/api/tickets', async (req, res) => {
-    console.log('Received ticket data:', req.body);
     try {
         const { emp_id, emp_name, emp_email, department, priority, issue_type, description } = req.body;
         if (!emp_id || !emp_name || !emp_email || !department || !priority || !issue_type || !description) {
@@ -174,8 +139,8 @@ app.post('/api/tickets', async (req, res) => {
 
         const result = await pool.query(
             `INSERT INTO tickets 
-(ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
-VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+            (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
             [ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description]
         );
 
@@ -201,16 +166,41 @@ app.get('/api/tickets', async (req, res) => {
 app.get('/api/tickets/:ticket_id', async (req, res) => {
     const { ticket_id } = req.params;
     try {
-        const result = await pool.query(
-            'SELECT * FROM tickets WHERE ticket_id = $1',
-            [ticket_id]
-        );
+        const result = await pool.query('SELECT * FROM tickets WHERE ticket_id = $1', [ticket_id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Ticket not found' });
         }
         res.json(result.rows[0]);
     } catch (err) {
         console.error('Error fetching ticket:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// =====================
+// PATCH: Update ticket status
+// =====================
+app.patch('/api/tickets/:ticket_id/status', async (req, res) => {
+    const { ticket_id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+        return res.status(400).json({ error: 'Status is required' });
+    }
+
+    try {
+        const result = await pool.query(
+            `UPDATE tickets SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE ticket_id = $2 RETURNING *`,
+            [status, ticket_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Ticket not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error updating ticket status:', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
