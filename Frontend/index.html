@@ -823,17 +823,17 @@
                 
                 <div class="form-group">
                     <label for="empEmail">Email Address</label>
-                   <input
+                   <label>Email Address</label>
+<input
   type="email"
-  name="email"
+  name="emp_email"
   required
+  minlength="8"
+  maxlength="40"
   pattern="^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$"
-  title="Email must start and end with a letter and end with @venturebiz.in"
+  title="Email must start with a letter, end with a letter, and use @venturebiz.in domain"
 />
 
-
-
-                    
                   <div class="invalid-feedback">Please enter a valid email (must be @venturebiz.in)</div>
 
                 </div>
