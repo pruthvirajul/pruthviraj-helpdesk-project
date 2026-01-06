@@ -836,11 +836,14 @@
         <div class="card">
             <h2><i class="fas fa-ticket-alt"></i> Create New Ticket</h2>
 
-            <form id="ticketForm">
+            <form id="ticketForm" class="ticket-form">
+
                 <div class="form-group">
                     <label for="empId">Employee ID</label>
-                    <input type="text" id="empId" class="form-control" placeholder="VPPL01"
-                        pattern="^VPPL(0[1-9]|[1-9][0-9])$" minlength="6" maxlength="6" required>
+                    <input type="email" id="emp_email" name="emp_email" class="form-control"
+                        placeholder="employee@venturebiz.in" required>
+
+                    pattern="^VPPL(0[1-9]|[1-9][0-9])$" minlength="6" maxlength="6" required>
 
                     <div class="invalid-feedback">Please enter a valid Employee ID (VPPL0 followed by 3 digits, not all
                         zeros)</div>
@@ -1328,17 +1331,29 @@
     </script>
 
    <script>
-document.getElementById("ticketForm").addEventListener("submit", function (e) {
-    const email = document.getElementById("emp_email").value.trim();
+document.addEventListener("DOMContentLoaded", function () {
 
-    // ONLY venturebiz.in allowed
-    const regex = /^[a-zA-Z][a-zA-Z0-9._-]*@venturebiz\.in$/;
+  const form = document.getElementById("ticketForm");
+  const emailInput = document.getElementById("emp_email");
 
-    if (!regex.test(email)) {
-        e.preventDefault(); // 🔥 THIS STOPS SUBMIT
-        alert("Only @venturebiz.in email is allowed");
-        return false;
+  if (!form || !emailInput) {
+    console.error("Form or Email input not found");
+    return;
+  }
+
+  form.addEventListener("submit", function (e) {
+    const email = emailInput.value.trim();
+
+    const ventureRegex = /^[a-zA-Z][a-zA-Z0-9._-]*@venturebiz\.in$/;
+
+    if (!ventureRegex.test(email)) {
+      e.preventDefault(); // 🔥 STOPS SUBMISSION
+      alert("Only @venturebiz.in email is allowed");
+      emailInput.focus();
+      return false;
     }
+  });
+
 });
 </script>
 
