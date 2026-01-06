@@ -50,7 +50,7 @@ app.use(cors({
             'http://51.20.253.98:5500',
             'http://51.20.253.98:3426',
             'http://51.20.253.98:8049',
-            'http://51.20.253.98:8050',
+            'http://51.20.253.98:8050', // frontend origin
         ];
         if (!origin || allowedOrigins.includes(origin) || origin === "null") {
             callback(null, true);
@@ -58,9 +58,10 @@ app.use(cors({
             callback(new Error('CORS policy: Origin not allowed'));
         }
     },
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // ✅ add PATCH
     allowedHeaders: ['Content-Type'],
 }));
+
 
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, '../Frontend')));
