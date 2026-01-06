@@ -858,10 +858,8 @@
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="emp_email" class="form-control"
-                        placeholder="employee@venturebiz.in" required
-                        pattern="^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$"
-                        title="Only @venturebiz.in email is allowed">
+                    <input type="email" id="emp_email" name="emp_email" class="form-control"
+                        placeholder="employee@venturebiz.in" required>
 
 
                     <div class="invalid-feedback">Please enter a valid company email address (must start with a letter
@@ -1329,20 +1327,20 @@
         }
     </script>
 
-    <script>
-        document.querySelector("form").addEventListener("submit", function (e) {
-            const emailInput = document.getElementById("email");
-            const email = emailInput.value.trim();
+   <script>
+document.getElementById("ticketForm").addEventListener("submit", function (e) {
+    const email = document.getElementById("emp_email").value.trim();
 
-            const regex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$/;
+    // ONLY venturebiz.in allowed
+    const regex = /^[a-zA-Z][a-zA-Z0-9._-]*@venturebiz\.in$/;
 
-            if (!regex.test(email)) {
-                e.preventDefault();
-                alert("Only @venturebiz.in email addresses are allowed");
-                emailInput.focus();
-            }
-        });
-    </script>
+    if (!regex.test(email)) {
+        e.preventDefault(); // 🔥 THIS STOPS SUBMIT
+        alert("Only @venturebiz.in email is allowed");
+        return false;
+    }
+});
+</script>
 
 
 </body>
