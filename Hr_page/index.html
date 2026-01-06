@@ -845,21 +845,6 @@
             currentTicketId = null;
         }
     </script>
-    <script>
-        document.getElementById("ticketForm").addEventListener("submit", function (e) {
-            const emailInput = document.getElementById("email");
-            const email = emailInput.value.trim();
-
-            const companyEmailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$/;
-
-            if (!companyEmailRegex.test(email)) {
-                e.preventDefault(); // STOP form submission
-                alert("Only @venturebiz.in email addresses are allowed");
-                emailInput.focus();
-                return false;
-            }
-        });
-    </script>
 
 </body>
 

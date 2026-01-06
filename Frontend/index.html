@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,9 +76,17 @@
         }
 
         @keyframes moveCircles {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-50%) translateX(-50%); }
-            100% { transform: translateY(0) translateX(0); }
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+
+            50% {
+                transform: translateY(-50%) translateX(-50%);
+            }
+
+            100% {
+                transform: translateY(0) translateX(0);
+            }
         }
 
         .banner-background {
@@ -246,7 +255,8 @@
             margin-top: 1rem;
         }
 
-        .tickets-table th, .tickets-table td {
+        .tickets-table th,
+        .tickets-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #eee;
@@ -534,8 +544,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideInDown {
@@ -543,6 +558,7 @@
                 transform: translateY(-50px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -554,6 +570,7 @@
                 transform: translateY(50px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -561,21 +578,36 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
                 transform: translateY(0);
             }
+
             40% {
                 transform: translateY(-20px);
             }
+
             60% {
                 transform: translateY(-10px);
             }
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         .bounce {
@@ -635,7 +667,8 @@
                 white-space: nowrap;
             }
 
-            .tickets-table th, .tickets-table td {
+            .tickets-table th,
+            .tickets-table td {
                 padding: 0.75rem;
             }
 
@@ -754,7 +787,8 @@
                 font-size: 0.8rem;
             }
 
-            .tickets-table th, .tickets-table td {
+            .tickets-table th,
+            .tickets-table td {
                 padding: 0.5rem;
                 font-size: 0.8rem;
             }
@@ -786,6 +820,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="banner-background">
@@ -800,44 +835,42 @@
     <div class="container">
         <div class="card">
             <h2><i class="fas fa-ticket-alt"></i> Create New Ticket</h2>
-            
+
             <form id="ticketForm">
                 <div class="form-group">
                     <label for="empId">Employee ID</label>
-                    <input type="text" id="empId" class="form-control"
- placeholder="VPPL01"
- pattern="^VPPL(0[1-9]|[1-9][0-9])$"
- minlength="6" maxlength="6" required>
+                    <input type="text" id="empId" class="form-control" placeholder="VPPL01"
+                        pattern="^VPPL(0[1-9]|[1-9][0-9])$" minlength="6" maxlength="6" required>
 
-                    <div class="invalid-feedback">Please enter a valid Employee ID (VPPL0 followed by 3 digits, not all zeros)</div>
+                    <div class="invalid-feedback">Please enter a valid Employee ID (VPPL0 followed by 3 digits, not all
+                        zeros)</div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="empName">Full Name</label>
-                    <input type="text" id="empName" class="form-control" placeholder="Employee Name" 
-                           pattern="^[A-Za-z]+(?: [A-Za-z]+)*$" 
-                           title="Only alphabets and single spaces between words, no leading/trailing spaces" 
-                           required minlength="3" maxlength="40">
-                    <div class="invalid-feedback">Please enter a valid name (only alphabets and single spaces between words, no leading/trailing spaces)</div>
+                    <input type="text" id="empName" class="form-control" placeholder="Employee Name"
+                        pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+                        title="Only alphabets and single spaces between words, no leading/trailing spaces" required
+                        minlength="3" maxlength="40">
+                    <div class="invalid-feedback">Please enter a valid name (only alphabets and single spaces between
+                        words, no leading/trailing spaces)</div>
                 </div>
-                
-             <div class="form-group">
-  <label for="email">Email Address</label>
-<input
-  type="email"
-  id="email"
-  name="email"
-  required
-  pattern="^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$"
-  title="Only @venturebiz.in email is allowed"
-/>
 
-    <div class="invalid-feedback">Please enter a valid company email address (must start with a letter and end with @venturebiz.in)</div>
-</div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="emp_email" class="form-control"
+                        placeholder="employee@venturebiz.in" required
+                        pattern="^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$"
+                        title="Only @venturebiz.in email is allowed">
+
+
+                    <div class="invalid-feedback">Please enter a valid company email address (must start with a letter
+                        and end with @venturebiz.in)</div>
+                </div>
 
 
 
-                
+
                 <div class="form-group">
                     <label for="department">Department</label>
                     <select id="department" class="form-control" required>
@@ -851,7 +884,7 @@
                     </select>
                     <div class="invalid-feedback">Please select a department</div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="priority">Priority</label>
                     <select id="priority" class="form-control" required>
@@ -863,7 +896,7 @@
                     </select>
                     <div class="invalid-feedback">Please select a priority level</div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="issueType">Issue Type</label>
                     <select id="issueType" class="form-control" required>
@@ -877,22 +910,22 @@
                     </select>
                     <div class="invalid-feedback">Please select an issue type</div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" class="form-control" rows="5" placeholder="Describe your issue in detail..." 
-                              minlength="10" 
-                              maxlength="200"
-                              title="Minimum 10 characters with letters, no leading/trailing spaces, no consecutive spaces" 
-                              required></textarea>
-                    <div class="invalid-feedback">Please provide a valid description (min 10 chars with letters, no leading/trailing spaces, no consecutive spaces)</div>
+                    <textarea id="description" class="form-control" rows="5"
+                        placeholder="Describe your issue in detail..." minlength="10" maxlength="200"
+                        title="Minimum 10 characters with letters, no leading/trailing spaces, no consecutive spaces"
+                        required></textarea>
+                    <div class="invalid-feedback">Please provide a valid description (min 10 chars with letters, no
+                        leading/trailing spaces, no consecutive spaces)</div>
                 </div>
-                
+
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-paper-plane"></i> Submit Ticket
                 </button>
             </form>
-            
+
             <div id="ticketPreview" class="ticket-preview">
                 <h3><i class="fas fa-eye"></i> Ticket Preview</h3>
                 <p><strong>Ticket ID:</strong> <span id="previewTicketId"></span></p>
@@ -937,7 +970,7 @@
             </table>
         </div>
     </div>
-    
+
     <!-- Success Modal -->
     <div id="successModal" class="modal success-modal">
         <div class="modal-content">
@@ -946,7 +979,8 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <h3>Ticket Submitted Successfully!</h3>
-                <p>Your ticket has been created and assigned a reference number. Our team will get back to you shortly.</p>
+                <p>Your ticket has been created and assigned a reference number. Our team will get back to you shortly.
+                </p>
                 <button class="btn btn-primary" onclick="closeModal()">
                     <i class="fas fa-thumbs-up"></i> Got it!
                 </button>
@@ -963,7 +997,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            
+
             <div class="modal-body">
                 <div class="ticket-details">
                     <p><strong>Employee Name:</strong> <span id="modalEmpName"></span></p>
@@ -978,7 +1012,7 @@
                         <span id="modalDescription"></span>
                     </div>
                 </div>
-                
+
                 <div class="comments-section">
                     <h4><i class="fas fa-comments"></i> Comments</h4>
                     <div id="commentsContainer">
@@ -1010,7 +1044,7 @@
 
         function validateField(field) {
             const feedback = field.nextElementSibling;
-            
+
             if (field.id === 'empName') {
                 if (!validateEmpName(field.value)) {
                     field.classList.add('is-invalid');
@@ -1036,7 +1070,7 @@
                 feedback.style.display = 'block';
                 return false;
             }
-            
+
             field.classList.remove('is-invalid');
             feedback.style.display = 'none';
             return true;
@@ -1051,40 +1085,40 @@
             return result;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const formControls = document.querySelectorAll('.form-control');
             formControls.forEach(control => {
                 const eventType = control.tagName === 'SELECT' ? 'change' : 'input';
                 control.addEventListener(eventType, () => validateField(control));
             });
 
-            document.getElementById('successModal').addEventListener('click', function(e) {
+            document.getElementById('successModal').addEventListener('click', function (e) {
                 if (e.target === this) closeModal();
             });
 
-            document.getElementById('ticketModal').addEventListener('click', function(e) {
+            document.getElementById('ticketModal').addEventListener('click', function (e) {
                 if (e.target === this) closeTicketModal();
             });
         });
 
-        document.getElementById('ticketForm').addEventListener('submit', async function(e) {
+        document.getElementById('ticketForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             let isValid = true;
             const formControls = document.querySelectorAll('.form-control');
-            
+
             formControls.forEach(control => {
                 if (!validateField(control)) {
                     isValid = false;
                 }
             });
-            
+
             if (!isValid) return;
-            
+
             try {
                 const empName = document.getElementById('empName').value.trim();
                 const description = document.getElementById('description').value.trim();
-                
+
                 const ticketData = {
                     empId: document.getElementById('empId').value.trim(),
                     empName: empName,
@@ -1094,9 +1128,9 @@
                     issueType: document.getElementById('issueType').value,
                     description: description
                 };
-                
+
                 console.log('Submitting ticket data:', ticketData); // Debug log
-                
+
                 const response = await fetch('http://51.20.253.98:3426/api/tickets', {
                     method: 'POST',
                     headers: {
@@ -1113,14 +1147,14 @@
                         ticket_id: generateTicketId()
                     })
                 });
-                
+
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Failed to submit ticket');
                 }
-                
+
                 const result = await response.json();
-                
+
                 document.getElementById('previewTicketId').textContent = result.ticket_id;
                 document.getElementById('previewEmpId').textContent = result.emp_id;
                 document.getElementById('previewEmpName').textContent = result.emp_name;
@@ -1129,15 +1163,15 @@
                 document.getElementById('previewPriority').textContent = result.priority;
                 document.getElementById('previewIssueType').textContent = result.issue_type;
                 document.getElementById('previewDescription').textContent = result.description;
-                
+
                 document.getElementById('ticketPreview').style.display = 'block';
-                
+
                 document.getElementById('successModal').classList.add('active');
-                
+
                 if (currentEmpId === result.emp_id) {
                     await loadMyTickets();
                 }
-                
+
                 this.reset();
                 formControls.forEach(control => {
                     control.classList.remove('is-invalid');
@@ -1148,8 +1182,8 @@
                 alert('Error submitting ticket: ' + error.message);
             }
         });
-        
-        document.getElementById('empId').addEventListener('change', async function() {
+
+        document.getElementById('empId').addEventListener('change', async function () {
             currentEmpId = this.value.trim();
             if (/^[VPPL]{3}0(?!000)[0-9]{3}$/.test(currentEmpId) && currentEmpId !== 'VPPL0000') {
                 document.getElementById('myTicketsCard').style.display = 'block';
@@ -1163,40 +1197,40 @@
 
         async function loadMyTickets() {
             if (!currentEmpId) return;
-            
+
             try {
                 const statusFilter = document.getElementById('filterStatusEmp').value;
                 const params = new URLSearchParams();
                 params.append('emp_id', currentEmpId);
                 if (statusFilter) params.append('status', statusFilter);
-                
+
                 const response = await fetch(`http://51.20.253.98:3426/api/tickets?${params.toString()}`);
                 if (!response.ok) throw new Error('Failed to fetch tickets');
-                
+
                 const tickets = await response.json();
                 const ticketsBody = document.getElementById('myTicketsBody');
                 ticketsBody.innerHTML = '';
-                
+
                 if (tickets.length === 0) {
                     ticketsBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No tickets found</td></tr>';
                     return;
                 }
-                
+
                 tickets.forEach(ticket => {
                     const row = document.createElement('tr');
-                    
+
                     let priorityClass = '';
                     if (ticket.priority === 'Critical') priorityClass = 'priority-critical';
                     else if (ticket.priority === 'High') priorityClass = 'priority-high';
                     else if (ticket.priority === 'Medium') priorityClass = 'priority-medium';
                     else if (ticket.priority === 'Low') priorityClass = 'priority-low';
-                    
+
                     let statusBadge = '';
                     if (ticket.status === 'Open') statusBadge = 'status-open';
                     if (ticket.status === 'In Progress') statusBadge = 'status-in-progress';
                     if (ticket.status === 'Resolved') statusBadge = 'status-resolved';
                     if (ticket.status === 'Closed') statusBadge = 'status-closed';
-                    
+
                     row.innerHTML = `
                         <td>${ticket.ticket_id}</td>
                         <td>${ticket.department}</td>
@@ -1209,7 +1243,7 @@
                             </button>
                         </td>
                     `;
-                    
+
                     ticketsBody.appendChild(row);
                 });
             } catch (error) {
@@ -1222,13 +1256,13 @@
             try {
                 const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}`);
                 if (!response.ok) throw new Error('Failed to fetch ticket');
-                
+
                 const ticket = await response.json();
                 currentTicketId = ticket.ticket_id;
-                
+
                 const createdDate = new Date(ticket.created_at);
                 const formattedDate = createdDate.toLocaleDateString() + ' ' + createdDate.toLocaleTimeString();
-                
+
                 document.getElementById('modalTicketId').textContent = ticket.ticket_id;
                 document.getElementById('modalEmpName').textContent = ticket.emp_name;
                 document.getElementById('modalEmpEmail').textContent = ticket.emp_email;
@@ -1238,9 +1272,9 @@
                 document.getElementById('modalIssueType').textContent = ticket.issue_type;
                 document.getElementById('modalCreated').textContent = formattedDate;
                 document.getElementById('modalDescription').textContent = ticket.description;
-                
+
                 await loadComments(ticketId);
-                
+
                 document.getElementById('ticketModal').classList.add('active');
             } catch (error) {
                 console.error('Error viewing ticket:', error);
@@ -1252,23 +1286,23 @@
             try {
                 const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}/comments`);
                 if (!response.ok) throw new Error('Failed to fetch comments');
-                
+
                 const comments = await response.json();
                 const commentsContainer = document.getElementById('commentsContainer');
                 commentsContainer.innerHTML = '';
-                
+
                 if (comments.length === 0) {
                     commentsContainer.innerHTML = '<p class="no-comments">No comments yet</p>';
                     return;
                 }
-                
+
                 comments.forEach(comment => {
                     const commentDate = new Date(comment.created_at);
                     const formattedDate = commentDate.toLocaleDateString() + ' ' + commentDate.toLocaleTimeString();
-                    
+
                     const commentDiv = document.createElement('div');
                     commentDiv.className = 'comment';
-                    
+
                     commentDiv.innerHTML = `
                         <div class="comment-header">
                             <span class="comment-author">${comment.author}</span>
@@ -1276,7 +1310,7 @@
                         </div>
                         <div class="comment-text">${comment.comment}</div>
                     `;
-                    
+
                     commentsContainer.appendChild(commentDiv);
                 });
             } catch (error) {
@@ -1294,6 +1328,23 @@
             currentTicketId = null;
         }
     </script>
-   
+
+    <script>
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const emailInput = document.getElementById("email");
+            const email = emailInput.value.trim();
+
+            const regex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$/;
+
+            if (!regex.test(email)) {
+                e.preventDefault();
+                alert("Only @venturebiz.in email addresses are allowed");
+                emailInput.focus();
+            }
+        });
+    </script>
+
+
 </body>
+
 </html>
