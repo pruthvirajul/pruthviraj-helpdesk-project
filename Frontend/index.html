@@ -924,12 +924,12 @@
                 </div>
 
 
-    <!-- Other fields go here -->
+                <!-- Other fields go here -->
 
-    <button type="submit" class="btn btn-primary">
-        <i class="fas fa-paper-plane"></i> Submit Ticket
-    </button>
-</form>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Submit Ticket
+                </button>
+            </form>
 
 
 
@@ -1130,12 +1130,13 @@
                 const ticketData = {
                     empId: document.getElementById('empId').value.trim(),
                     empName: empName,
-                    empEmail: document.getElementById('empEmail').value.trim(),
+                    empEmail: document.getElementById('emp_email').value.trim(), // Correct ID
                     department: document.getElementById('department').value,
                     priority: document.getElementById('priority').value,
                     issueType: document.getElementById('issueType').value,
                     description: description
                 };
+
 
                 console.log('Submitting ticket data:', ticketData); // Debug log
 
@@ -1340,33 +1341,33 @@
         }
     </script>
 
-  <script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-    const form = document.getElementById("ticketForm");
-    const emailInput = document.getElementById("emp_email");
+            const form = document.getElementById("ticketForm");
+            const emailInput = document.getElementById("emp_email");
 
-    form.addEventListener("submit", function (e) {
-        const email = emailInput.value.trim();
+            form.addEventListener("submit", function (e) {
+                const email = emailInput.value.trim();
 
-        // Only allow emails ending with @venturebiz.in
-        const ventureRegex = /^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z0-9]@venturebiz\.in$/;
+                // Only allow emails ending with @venturebiz.in
+                const ventureRegex = /^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z0-9]@venturebiz\.in$/;
 
-        if (!ventureRegex.test(email)) {
-            e.preventDefault(); // Stops form submission
-            emailInput.classList.add('is-invalid');
-            emailInput.nextElementSibling.style.display = 'block';
-            alert("Only @venturebiz.in email is allowed");
-            emailInput.focus();
-            return false;
-        } else {
-            emailInput.classList.remove('is-invalid');
-            emailInput.nextElementSibling.style.display = 'none';
-        }
-    });
+                if (!ventureRegex.test(email)) {
+                    e.preventDefault(); // Stops form submission
+                    emailInput.classList.add('is-invalid');
+                    emailInput.nextElementSibling.style.display = 'block';
+                    alert("Only @venturebiz.in email is allowed");
+                    emailInput.focus();
+                    return false;
+                } else {
+                    emailInput.classList.remove('is-invalid');
+                    emailInput.nextElementSibling.style.display = 'none';
+                }
+            });
 
-});
-</script>
+        });
+    </script>
 
 
 
