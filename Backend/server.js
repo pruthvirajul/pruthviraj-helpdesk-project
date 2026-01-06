@@ -1,3 +1,7 @@
+// =====================
+// Backend: server.js
+// =====================
+
 // Import required modules
 const express = require('express'); 
 const cors = require('cors');
@@ -24,7 +28,7 @@ const pool = new Pool({
 function generateTicketId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = 'VPPL';
-    for (let i = 0; i < 6; i++) { // 4 + 6 = 10 chars
+    for (let i = 0; i < 6; i++) { // VPPL + 6 chars = 10
         result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
@@ -69,10 +73,11 @@ app.get('/favicon.ico', (req, res) => {
     });
 });
 
-// Initialize database tables
+// =====================
+// Database Initialization
+// =====================
 const initializeDatabase = async () => {
     try {
-        // Drop tables if schema mismatch
         const schemaCheck = await pool.query(`
             SELECT column_name, data_type, character_maximum_length 
             FROM information_schema.columns 
@@ -142,7 +147,11 @@ const initializeDatabase = async () => {
     }
 };
 
-// API to create a new ticket
+// =====================
+// API Routes
+// =====================
+
+// Create a new ticket
 app.post('/api/tickets', async (req, res) => {
     console.log('Received ticket data:', req.body);
     try {
@@ -151,17 +160,18 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        // Validate VPPL Employee ID
+        // Employee ID validation
         if (!/^VPPL(0[1-9]|[1-9][0-9])$/.test(emp_id)) {
             return res.status(400).json({ error: 'Invalid Employee ID format' });
         }
 
-        // Validate venturebiz.in email
+        // Email validation
         if (!/^[a-zA-Z][a-zA-Z0-9._-]*[a-zA-Z]@venturebiz\.in$/.test(emp_email)) {
             return res.status(400).json({ error: 'Email must be from @venturebiz.in domain' });
         }
 
         const ticket_id = generateTicketId();
+
         const result = await pool.query(
             `INSERT INTO tickets 
 (ticket_id, emp_id, emp_name, emp_email, department, priority, issue_type, description) 
@@ -176,8 +186,18 @@ VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
     }
 });
 
-// API to get all tickets
-// Get a single ticket by ticket_id
+// Fetch all tickets
+app.get('/api/tickets', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM tickets ORDER BY created_at DESC');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching tickets:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Fetch single ticket by ticket_id
 app.get('/api/tickets/:ticket_id', async (req, res) => {
     const { ticket_id } = req.params;
     try {
@@ -185,11 +205,9 @@ app.get('/api/tickets/:ticket_id', async (req, res) => {
             'SELECT * FROM tickets WHERE ticket_id = $1',
             [ticket_id]
         );
-
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Ticket not found' });
         }
-
         res.json(result.rows[0]);
     } catch (err) {
         console.error('Error fetching ticket:', err);
@@ -197,8 +215,9 @@ app.get('/api/tickets/:ticket_id', async (req, res) => {
     }
 });
 
-
-// Start server
+// =====================
+// Start Server
+// =====================
 const startServer = async () => {
     await initializeDatabase();
     app.listen(port, '0.0.0.0', () => {
