@@ -840,9 +840,12 @@
 
                 <div class="form-group">
                     <label for="empId">Employee ID</label>
-                    <input type="email" id="emp_email" name="emp_email" class="form-control"
-                        placeholder="employee id" required>
-
+                    <input type="text" id="empId" name="empId" class="form-control" placeholder="VPPL01 to VPPL99"
+                        required>
+                    <div class="invalid-feedback">Please enter a valid Employee ID (VPPL01 to VPPL99)</div>
+                    <!-- <input type="text" id="empId" class="form-control" placeholder="VPPL0XXX"
+                        pattern="^VPPL0(?!000)[0-9]{3}$"
+                        title="Format: VPPL0 followed by 3 digits, not all zeros" required maxlength="7"> -->
                     <div class="invalid-feedback">Please enter a valid Employee ID (VPPL0 followed by 3 digits, not all
                         zeros)</div>
                 </div>
@@ -1184,13 +1187,16 @@
 
         document.getElementById('empId').addEventListener('change', async function () {
             currentEmpId = this.value.trim();
-            if (/^[VPPL]{3}0(?!000)[0-9]{3}$/.test(currentEmpId) && currentEmpId !== 'VPPL0000') {
+            // Regex for VPPL01 to VPPL99
+            if (/^VPPL(0[1-9]|[1-9][0-9])$/.test(currentEmpId)) {
                 document.getElementById('myTicketsCard').style.display = 'block';
                 await loadMyTickets();
             } else {
                 document.getElementById('myTicketsCard').style.display = 'none';
+                alert("Invalid Employee ID. Only VPPL01 to VPPL99 allowed.");
             }
         });
+
 
         document.getElementById('filterStatusEmp').addEventListener('change', loadMyTickets);
 
@@ -1328,32 +1334,32 @@
         }
     </script>
 
-   <script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-  const form = document.getElementById("ticketForm");
-  const emailInput = document.getElementById("emp_email");
+            const form = document.getElementById("ticketForm");
+            const emailInput = document.getElementById("emp_email");
 
-  if (!form || !emailInput) {
-    console.error("Form or Email input not found");
-    return;
-  }
+            if (!form || !emailInput) {
+                console.error("Form or Email input not found");
+                return;
+            }
 
-  form.addEventListener("submit", function (e) {
-    const email = emailInput.value.trim();
+            form.addEventListener("submit", function (e) {
+                const email = emailInput.value.trim();
 
-    const ventureRegex = /^[a-zA-Z][a-zA-Z0-9._-]*@venturebiz\.in$/;
+                const ventureRegex = /^[a-zA-Z][a-zA-Z0-9._-]*@venturebiz\.in$/;
 
-    if (!ventureRegex.test(email)) {
-      e.preventDefault(); // 🔥 STOPS SUBMISSION
-      alert("Only @venturebiz.in email is allowed");
-      emailInput.focus();
-      return false;
-    }
-  });
+                if (!ventureRegex.test(email)) {
+                    e.preventDefault(); // 🔥 STOPS SUBMISSION
+                    alert("Only @venturebiz.in email is allowed");
+                    emailInput.focus();
+                    return false;
+                }
+            });
 
-});
-</script>
+        });
+    </script>
 
 
 </body>
