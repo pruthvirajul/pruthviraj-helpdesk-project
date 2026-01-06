@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,9 +76,17 @@
         }
 
         @keyframes moveCircles {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-50%) translateX(-50%); }
-            100% { transform: translateY(0) translateX(0); }
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+
+            50% {
+                transform: translateY(-50%) translateX(-50%);
+            }
+
+            100% {
+                transform: translateY(0) translateX(0);
+            }
         }
 
         .banner-background {
@@ -181,7 +190,8 @@
             table-layout: fixed;
         }
 
-        .tickets-table th, .tickets-table td {
+        .tickets-table th,
+        .tickets-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #eee;
@@ -199,31 +209,38 @@
             text-align: center;
         }
 
-        .tickets-table th:first-child, .tickets-table td:first-child {
+        .tickets-table th:first-child,
+        .tickets-table td:first-child {
             width: 10%;
         }
 
-        .tickets-table th:nth-child(2), .tickets-table td:nth-child(2) {
+        .tickets-table th:nth-child(2),
+        .tickets-table td:nth-child(2) {
             width: 15%;
         }
 
-        .tickets-table th:nth-child(3), .tickets-table td:nth-child(3) {
+        .tickets-table th:nth-child(3),
+        .tickets-table td:nth-child(3) {
             width: 15%;
         }
 
-        .tickets-table th:nth-child(4), .tickets-table td:nth-child(4) {
+        .tickets-table th:nth-child(4),
+        .tickets-table td:nth-child(4) {
             width: 15%;
         }
 
-        .tickets-table th:nth-child(5), .tickets-table td:nth-child(5) {
+        .tickets-table th:nth-child(5),
+        .tickets-table td:nth-child(5) {
             width: 10%;
         }
 
-        .tickets-table th:nth-child(6), .tickets-table td:nth-child(6) {
+        .tickets-table th:nth-child(6),
+        .tickets-table td:nth-child(6) {
             width: 10%;
         }
 
-        .tickets-table th:last-child, .tickets-table td:last-child {
+        .tickets-table th:last-child,
+        .tickets-table td:last-child {
             width: 15%;
         }
 
@@ -452,8 +469,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideInDown {
@@ -461,6 +483,7 @@
                 transform: translateY(-50px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -472,6 +495,7 @@
                 transform: translateY(50px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -479,36 +503,45 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2rem;
             }
-            
+
             .card {
                 padding: 1.5rem;
             }
-            
+
             .tickets-table {
                 display: block;
                 overflow-x: auto;
             }
-            
+
             .filters {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .filter-group {
                 min-width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="banner-background">
@@ -519,11 +552,11 @@
         <h1><i class="fas fa-headset"></i> VPPL Help Desk - HR Dashboard</h1>
         <p>Manage and resolve employee tickets efficiently</p>
     </header>
-    
+
     <div class="container">
         <div class="card">
             <h2><i class="fas fa-filter"></i> Filters</h2>
-            
+
             <div class="filters">
                 <div class="filter-group">
                     <label for="filterStatus">Status</label>
@@ -535,7 +568,7 @@
                         <option value="Closed">Closed</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="filterPriority">Priority</label>
                     <select id="filterPriority" class="filter-control">
@@ -548,10 +581,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="card">
             <h2><i class="fas fa-ticket-alt"></i> Tickets</h2>
-            
+
             <table class="tickets-table">
                 <thead>
                     <tr>
@@ -570,14 +603,14 @@
             </table>
         </div>
     </div>
-    
+
     <div id="ticketModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-ticket-alt"></i> <span id="modalTicketId"></span></h3>
                 <button class="modal-close" onclick="closeModal()">×</button>
             </div>
-            
+
             <div class="ticket-details">
                 <p><strong>Employee ID:</strong> <span id="modalEmpId"></span></p>
                 <p><strong>Employee Name:</strong> <span id="modalEmpName"></span></p>
@@ -592,7 +625,7 @@
                     <span id="modalDescription"></span>
                 </div>
             </div>
-            
+
             <div class="ticket-actions">
                 <button class="btn btn-warning" onclick="updateStatus('In Progress')">
                     <i class="fas fa-tasks"></i> In Progress
@@ -612,11 +645,11 @@
 
     <script>
         let currentTicketId = null;
-        
-        document.addEventListener('DOMContentLoaded', async function() {
+
+        document.addEventListener('DOMContentLoaded', async function () {
             try {
                 await renderTickets();
-                
+
                 document.getElementById('filterStatus').addEventListener('change', renderTickets);
                 document.getElementById('filterPriority').addEventListener('change', renderTickets);
             } catch (error) {
@@ -624,7 +657,7 @@
                 alert('Error initializing page');
             }
         });
-        
+
         async function renderTickets() {
             try {
                 const statusFilter = document.getElementById('filterStatus')?.value || '';
@@ -650,7 +683,7 @@
 
                 // Fallback: Client-side filtering if API doesn't filter priority correctly
                 if (priorityFilter) {
-                    tickets = tickets.filter(ticket => 
+                    tickets = tickets.filter(ticket =>
                         (ticket.priority || '').toLowerCase() === normalizedPriority
                     );
                 }
@@ -721,23 +754,23 @@
                 }
             }
         }
-        
+
         async function viewTicket(ticketId) {
             try {
                 const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}`);
                 if (!response.ok) throw new Error('Failed to fetch ticket');
-                
+
                 const ticket = await response.json();
                 currentTicketId = ticket.ticket_id || ticket.id;
 
                 const createdDate = new Date(ticket.created_at || ticket.createdAt || Date.now());
                 const formattedDate = createdDate.toLocaleDateString() + ' ' + createdDate.toLocaleTimeString();
-                
+
                 const setModalContent = (id, value) => {
                     const el = document.getElementById(id);
                     if (el) el.textContent = value || 'N/A';
                 };
-                
+
                 setModalContent('modalTicketId', ticket.ticket_id || ticket.id);
                 setModalContent('modalEmpId', ticket.emp_id || ticket.employeeId);
                 setModalContent('modalEmpName', ticket.emp_name || ticket.employeeName);
@@ -748,17 +781,17 @@
                 setModalContent('modalStatus', ticket.status);
                 setModalContent('modalCreated', formattedDate);
                 setModalContent('modalDescription', ticket.description);
-                
+
                 document.getElementById('ticketModal').classList.add('active');
             } catch (error) {
                 console.error('Error viewing ticket:', error);
                 alert('Error loading ticket details');
             }
         }
-        
+
         async function updateStatus(newStatus) {
             if (!currentTicketId) return;
-            
+
             try {
                 const response = await fetch(`http://51.20.253.98:3426/api/tickets/${currentTicketId}/status`, {
                     method: 'PUT',
@@ -767,9 +800,9 @@
                     },
                     body: JSON.stringify({ status: newStatus })
                 });
-                
+
                 if (!response.ok) throw new Error('Failed to update ticket');
-                
+
                 closeModal();
                 await renderTickets();
                 alert(`Ticket status updated to ${newStatus}`);
@@ -778,13 +811,13 @@
                 alert('Error updating ticket status');
             }
         }
-        
+
         async function addComment() {
             if (!currentTicketId) return;
-            
+
             const comment = prompt('Enter your comment:');
             if (!comment) return;
-            
+
             try {
                 const response = await fetch(`http://51.20.253.98:3426/api/tickets/${currentTicketId}/comments`, {
                     method: 'POST',
@@ -796,21 +829,38 @@
                         author: 'HR Representative'
                     })
                 });
-                
+
                 if (!response.ok) throw new Error('Failed to add comment');
-                
+
                 alert('Comment added successfully');
             } catch (error) {
                 console.error('Error adding comment:', error);
                 alert('Error adding comment');
             }
         }
-        
+
         function closeModal() {
             const modal = document.getElementById('ticketModal');
             if (modal) modal.classList.remove('active');
             currentTicketId = null;
         }
     </script>
+    <script>
+        document.getElementById("ticketForm").addEventListener("submit", function (e) {
+            const emailInput = document.getElementById("email");
+            const email = emailInput.value.trim();
+
+            const companyEmailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@venturebiz\.in$/;
+
+            if (!companyEmailRegex.test(email)) {
+                e.preventDefault(); // STOP form submission
+                alert("Only @venturebiz.in email addresses are allowed");
+                emailInput.focus();
+                return false;
+            }
+        });
+    </script>
+
 </body>
+
 </html>
