@@ -180,9 +180,14 @@ app.get('/api/tickets/:ticket_id', async (req, res) => {
 // =====================
 // PATCH: Update ticket status
 // =====================
-app.patch('/api/tickets/:ticket_id/status', async (req, res) => {
-    const { ticket_id } = req.params;
+// Correct route for updating ticket
+app.patch('/api/tickets/:ticketId', async (req, res) => {
+    const { ticketId } = req.params;
     const { status } = req.body;
+
+    // Update ticket logic here
+    // ...
+
 
     if (!status) {
         return res.status(400).json({ error: 'Status is required' });

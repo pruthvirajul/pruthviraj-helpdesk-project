@@ -1310,11 +1310,16 @@
         }
 async function updateStatus(ticketId, newStatus) {
     try {
-        const response = await fetch(`http://51.20.253.98:3426/api/tickets/${ticketId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: newStatus })
-        });
+        const response = await fetch(
+            `http://51.20.253.98:3426/api/tickets/${ticketId}/status`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            }
+        );
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -1324,15 +1329,13 @@ async function updateStatus(ticketId, newStatus) {
         const updatedTicket = await response.json();
         alert(`Ticket ${ticketId} status updated to ${updatedTicket.status}`);
 
-        // ✅ Refresh the ticket table to show the new status
+        // refresh table
         await loadMyTickets();
     } catch (error) {
         console.error('Error updating ticket status:', error);
         alert('Error updating ticket: ' + error.message);
     }
 }
-
-
 
         async function loadComments(ticketId) {
             try {
