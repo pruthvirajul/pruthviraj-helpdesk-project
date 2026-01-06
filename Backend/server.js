@@ -160,7 +160,8 @@ app.post('/api/tickets', async (req, res) => {
             return res.status(400).json({ error: 'Field length exceeded' });
         }
 
-        if (!/^VPPL0[0-9]{3}$/.test(emp_id) || emp_id === 'VPPL0000') {
+        if (/^VPPL(0[1-9]|[1-9][0-9])$/.test(currentEmpId)) {
+
             console.log('Invalid emp_id:', emp_id);
             return res.status(400).json({ error: 'Invalid Employee ID' });
         }
