@@ -726,29 +726,30 @@
                     const empId = truncateText(ticket.emp_id || ticket.employeeId);
                     const department = truncateText(ticket.department);
                     const issueType = truncateText(ticket.issue_type || ticket.issueType);
-                    const ticketId = ticket.ticket_id || ticket.id;
+                    const displayId = ticket.ticket_id; // VPPLxxx (UI)
+                    const apiId = ticket.id;            // numeric (backend)
 
-                    if (!ticketId) {
-                        console.error('Missing ticket ID from backend:', ticket);
+                    if (!apiId) {
+                        console.error('Missing numeric ticket ID:', ticket);
                         return;
                     }
 
-
                     row.innerHTML = `
-                        <td>${ticketId}</td>
-                        <td class="truncate" title="${ticket.emp_name || ticket.employeeName || 'N/A'}\n${ticket.emp_id || ticket.employeeId || 'N/A'}">
-                            ${empName}<br><small>${empId}</small>
-                        </td>
-                        <td class="truncate" title="${ticket.department || 'N/A'}">${department}</td>
-                        <td class="truncate" title="${ticket.issue_type || ticket.issueType || 'N/A'}">${issueType}</td>
-                        <td class="${priorityClass}">${ticket.priority || 'N/A'}</td>
-                        <td><span class="status-badge ${statusBadge}">${ticket.status}</span></td>
-                        <td>
-                            <button class="action-btn btn-view" onclick="viewTicket('${ticketId}')" title="View">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </td>
-                    `;
+    <td>${displayId}</td>
+    <td class="truncate" title="${ticket.emp_name || ticket.employeeName || 'N/A'}\n${ticket.emp_id || ticket.employeeId || 'N/A'}">
+        ${empName}<br><small>${empId}</small>
+    </td>
+    <td class="truncate" title="${ticket.department || 'N/A'}">${department}</td>
+    <td class="truncate" title="${ticket.issue_type || ticket.issueType || 'N/A'}">${issueType}</td>
+    <td class="${priorityClass}">${ticket.priority || 'N/A'}</td>
+    <td><span class="status-badge ${statusBadge}">${ticket.status}</span></td>
+    <td>
+        <button class="action-btn btn-view" onclick="viewTicket(${apiId})" title="View">
+            <i class="fas fa-eye"></i>
+        </button>
+    </td>
+`;
+
 
                     ticketsBody.appendChild(row);
                 });
