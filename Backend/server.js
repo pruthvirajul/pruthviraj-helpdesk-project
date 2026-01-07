@@ -47,10 +47,10 @@ pool.connect((err, client, release) => {
 app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = [
-            'http://51.20.253.98:5500',
-            'http://51.20.253.98:3426',
-            'http://51.20.253.98:8049',
-            'http://51.20.253.98:8050', // frontend origin
+            'http://13.62.226.170:5500',
+            'http://13.62.226.170:3426',
+            'http://13.62.226.170:8049',
+            'http://13.62.226.170:8050', // frontend origin
         ];
         if (!origin || allowedOrigins.includes(origin) || origin === "null") {
             callback(null, true);
