@@ -726,7 +726,13 @@
                     const empId = truncateText(ticket.emp_id || ticket.employeeId);
                     const department = truncateText(ticket.department);
                     const issueType = truncateText(ticket.issue_type || ticket.issueType);
-                    const ticketId = ticket.ticket_id || ticket.id || 'VPPL' + Math.random().toString(36).substr(2, 5).toUpperCase();
+                    const ticketId = ticket.ticket_id || ticket.id;
+
+                    if (!ticketId) {
+                        console.error('Missing ticket ID from backend:', ticket);
+                        return;
+                    }
+
 
                     row.innerHTML = `
                         <td>${ticketId}</td>
@@ -757,11 +763,12 @@
 
         async function viewTicket(ticketId) {
             try {
+                currentTicketId = ticketId;   // ✅ THIS WAS MISSING
+
                 const response = await fetch(`http://13.62.226.170:3426/api/tickets/${ticketId}`);
                 if (!response.ok) throw new Error('Failed to fetch ticket');
 
                 const ticket = await response.json();
-                currentTicketId = ticket.ticket_id || ticket.id;
 
                 const createdDate = new Date(ticket.created_at || ticket.createdAt || Date.now());
                 const formattedDate = createdDate.toLocaleDateString() + ' ' + createdDate.toLocaleTimeString();
@@ -788,6 +795,7 @@
                 alert('Error loading ticket details');
             }
         }
+
 
         async function updateStatus(newStatus) {
             if (!currentTicketId) return;
