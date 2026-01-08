@@ -672,7 +672,7 @@
 
                 console.log('Fetching tickets with params:', params.toString());
 
-                const response = await fetch(`http://13.62.226.170:3426/api/tickets?${params.toString()}`);
+                const response = await fetch(`http://13.60.235.40:3426/api/tickets?${params.toString()}`);
                 if (!response.ok) {
                     console.error('API response status:', response.status, response.statusText);
                     throw new Error('Failed to fetch tickets');
@@ -766,7 +766,7 @@
             try {
                 currentTicketId = ticketId;   // ✅ THIS WAS MISSING
 
-                const response = await fetch(`http://13.62.226.170:3426/api/tickets/${ticketId}`);
+                const response = await fetch(`http://13.60.235.40:3426/api/tickets/${ticketId}`);
                 if (!response.ok) throw new Error('Failed to fetch ticket');
 
                 const ticket = await response.json();
@@ -802,7 +802,7 @@
             if (!currentTicketId) return;
 
             try {
-                const response = await fetch(`http://13.62.226.170:3426/api/tickets/${currentTicketId}/status`, {
+                const response = await fetch(`http://13.60.235.40:3426/api/tickets/${currentTicketId}/status`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -828,7 +828,7 @@
             if (!comment) return;
 
             try {
-                const response = await fetch(`http://13.62.226.170:3426/api/tickets/${currentTicketId}/comments`, {
+                const response = await fetch(`http://13.60.235.40:3426/api/tickets/${currentTicketId}/comments`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
