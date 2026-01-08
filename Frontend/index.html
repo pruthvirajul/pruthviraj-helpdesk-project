@@ -1310,8 +1310,7 @@
         }
 async function updateStatus(ticketId, newStatus) {
     try {
-        const response = await fetch(
-            `http://13.60.235.40:3426/api/tickets/${ticketId}/status`,
+        const response = await fetch(`http://13.60.235.40:3426/api/tickets/${ticketId}/status`,
             {
                 method: 'PATCH',
                 headers: {

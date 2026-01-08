@@ -244,7 +244,7 @@ app.post('/api/tickets/:id/comments', async (req, res) => {
 // =====================
 const startServer = async () => {
     await initializeDatabase();
-    app.listen(port, '0.0.0.0', () => {
+    app.listen(port, '13.60.235.40', () => {
         console.log(`🚀 Server running on port ${port}`);
     });
 };
